@@ -7,7 +7,7 @@ import java.sql.Connection;
  * @author Cristopher Vidal
  * @author Khadije El Zein
  */
-public class ConectorEndereco {
+public class ConectorEndereco extends MySQLConnection {
     private static final String USUARIO_BD = "root";
     private static final String SENHA_BD   = "";
     private static final String URL_BD     = "jdbc:mysql://localhost/enderecoDB";

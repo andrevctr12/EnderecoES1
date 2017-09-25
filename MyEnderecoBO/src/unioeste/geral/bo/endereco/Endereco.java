@@ -13,6 +13,15 @@ public class Endereco implements Serializable {
     private Bairro bairro;
     private Logradouro logradouro;
 
+    public Endereco() {
+    }
+
+    public Endereco(Cidade cidade, Bairro bairro, Logradouro logradouro) {
+        this.cidade = cidade;
+        this.bairro = bairro;
+        this.logradouro = logradouro;
+    }
+
     public int getIdEndereco() {
         return idEndereco;
     }

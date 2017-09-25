@@ -12,6 +12,14 @@ public class EnderecoEspecifico implements Serializable {
     private String complemento;
     private Endereco endereco;
 
+    public EnderecoEspecifico() {
+    }
+
+    public EnderecoEspecifico(Endereco endereco) {
+
+        this.endereco = endereco;
+    }
+
     public int getIdEnderecoEspecifico() {
         return idEnderecoEspecifico;
     }

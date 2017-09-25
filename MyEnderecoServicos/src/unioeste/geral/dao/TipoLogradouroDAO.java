@@ -13,7 +13,6 @@ public interface TipoLogradouroDAO {
     public void inserir(TipoLogradouro objeto);
     public void atualizar(TipoLogradouro objeto);
     public void excluir(int id);
-    public TipoLogradouro consultar(TipoLogradouro objeto) throws Exception;
     public TipoLogradouro consultar(int id);
     public List<TipoLogradouro> consultarTodos();
 

@@ -13,7 +13,7 @@ public interface EnderecoDAO {
     public void inserir(Endereco objeto);
     public void atualizar(Endereco objeto);
     public void excluir(int id);
-    public Endereco consultar(Endereco objeto);
+    public List<Endereco> consultar(String CEP);
     public Endereco consultar(int id);
     public List<Endereco> consultarTodos();
 

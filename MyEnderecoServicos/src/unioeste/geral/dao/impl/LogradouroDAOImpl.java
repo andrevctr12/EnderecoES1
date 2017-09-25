@@ -2,11 +2,15 @@ package unioeste.geral.dao.impl;
 
 import unioeste.apoio.bd.ConectorEndereco;
 import unioeste.geral.bo.endereco.Logradouro;
+import unioeste.geral.bo.endereco.TipoLogradouro;
 import unioeste.geral.dao.LogradouroDAO;
 import unioeste.geral.dao.TipoLogradouroDAO;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,10 +28,17 @@ public class LogradouroDAOImpl implements LogradouroDAO {
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
             String sql = "INSERT logradouro VALUES(NULL, '"
-                    + objeto.getNome() + "', "
+                    + objeto.getNome() + "',' "
                     + objeto.getTipoLogradouro().getIdTipoLogradouro() + "'" + ")";
-            statement = conexao.prepareStatement(sql);
+            statement = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.executeUpdate();
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                objeto.setIdLogradouro(rs.getInt(1));
+            }
+            else {
+                throw new SQLException("Nenhum ID obtido");
+            }
         } catch (Exception ex) {
             try {
                 conexao.rollback();
@@ -119,9 +130,10 @@ public class LogradouroDAOImpl implements LogradouroDAO {
             statement = conexao.prepareStatement(sql);
             ResultSet resultado = statement.executeQuery();
             if (resultado.next()) {
-                Logradouro obj = new Logradouro();
+                Logradouro obj = new Logradouro(new TipoLogradouro());
                 obj.setIdLogradouro(resultado.getInt("idLogradouro"));
                 obj.setNome(resultado.getString("nome"));
+                obj.getTipoLogradouro().setIdTipoLogradouro(resultado.getInt("idTipoLogradouro"));
                 return obj;
             }
         } catch (Exception ex) {
@@ -150,6 +162,40 @@ public class LogradouroDAOImpl implements LogradouroDAO {
     }
 
     public List<Logradouro> consultarTodos() {
+        try {
+            ConectorEndereco conexaoDB = new ConectorEndereco();
+            conexao = conexaoDB.getConnection();
+            conexao.setAutoCommit(false);
+            List<Logradouro> lista = new ArrayList<Logradouro>();
+            String sql = "select * from tipoLogradouro";
+            statement = conexao.prepareStatement(sql);
+            ResultSet resultado = statement.executeQuery();
+            while (resultado.next()) {
+                Logradouro obj = new Logradouro(new TipoLogradouro());
+                obj.setIdLogradouro(resultado.getInt("idLogradouro"));
+                obj.setNome(resultado.getString("nome"));
+                obj.getTipoLogradouro().setIdTipoLogradouro(resultado.getInt("idTipoLogradouro"));
+                lista.add(obj);
+            }
+            return lista;
+        } catch (Exception ex) {
+            try {
+                conexao.rollback();
+            } catch (Exception e) {
+                System.out.println("Erro de conexão");
+            }
+            System.out.println("Erro de consulta");
+        } finally {
+            try {
+                if (conexao != null) {
+                    conexao.setAutoCommit(true);
+                    statement.close();
+                    conexao.close();
+                }
+            } catch (Exception ex) {
+                System.out.println("Erro de consistencia");
+            }
+        }
         return null;
     }
 }

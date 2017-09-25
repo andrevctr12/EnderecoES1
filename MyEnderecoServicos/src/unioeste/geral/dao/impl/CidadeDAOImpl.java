@@ -1,8 +1,9 @@
 package unioeste.geral.dao.impl;
 
 import unioeste.apoio.bd.ConectorEndereco;
-import unioeste.geral.bo.endereco.TipoLogradouro;
-import unioeste.geral.dao.TipoLogradouroDAO;
+import unioeste.geral.bo.endereco.Cidade;
+import unioeste.geral.bo.endereco.UnidadeFederativa;
+import unioeste.geral.dao.CidadeDAO;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,22 +16,23 @@ import java.util.List;
  * @author Cristopher Vidal
  * @author Khadije El Zein
  */
-public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
+public class CidadeDAOImpl implements CidadeDAO {
     private Connection conexao;
     private java.sql.PreparedStatement statement;
 
-    public void inserir(TipoLogradouro objeto) {
+    public void inserir(Cidade objeto) {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            String sql = "INSERT tipoLogradouro VALUES(NULL, '"
-                    + objeto.getTipo() + "'" + ")";
+            String sql = "INSERT cidade VALUES(NULL, '"
+                    + objeto.getNome() + "','"
+                    + objeto.getUnidadeFederativa().getIdUnidadeFederativa() + "'" + ")";
             statement = conexao.prepareStatement(sql);
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
             if (rs.next()) {
-                objeto.setIdTipoLogradouro(rs.getInt(1));
+                objeto.setIdCidade(rs.getInt(1));
             }
             else {
                 throw new SQLException("Nenhum ID obtido");
@@ -56,14 +58,15 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         }
     }
 
-    public void atualizar(TipoLogradouro objeto) {
+    public void atualizar(Cidade objeto) {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            String sql = "UPDATE tipoLogradouro SET "
-                    +" tipo=" + objeto.getTipo()
-                    +" where idTipoLogradouro=" + objeto.getIdTipoLogradouro();
+            String sql = "UPDATE cidade SET "
+                    +" nome=" + objeto.getNome()
+                    +" idUnidadeFederativa=" + objeto.getUnidadeFederativa().getIdUnidadeFederativa()
+                    +" where idLogradouro=" + objeto.getIdCidade();
             statement = conexao.prepareStatement(sql);
             statement.executeUpdate();
         } catch (Exception ex) {
@@ -92,7 +95,7 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            String sql = "DELETE FROM tipoLogradouro WHERE idTipoLogradouro=?";
+            String sql = "DELETE FROM cidade WHERE idCidade=?";
             statement = conexao.prepareStatement(sql);
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -116,18 +119,19 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         }
     }
 
-    public TipoLogradouro consultar(int id) {
+    public Cidade consultar(Cidade objeto) {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            String sql = "select * from tipoLogradouro where idTipoLogradouro=" + id;
+            String sql = "select * from cidade where nome='" + objeto.getNome() + "'";
             statement = conexao.prepareStatement(sql);
             ResultSet resultado = statement.executeQuery();
             if (resultado.next()) {
-                TipoLogradouro obj = new TipoLogradouro();
-                obj.setIdTipoLogradouro(resultado.getInt("idTipoLogradouro"));
-                obj.setTipo(resultado.getString("tipo"));
+                Cidade obj = new Cidade(new UnidadeFederativa());
+                obj.setIdCidade(resultado.getInt("idCidade"));
+                obj.setNome(resultado.getString("nome"));
+                obj.getUnidadeFederativa().setIdUnidadeFederativa(resultado.getInt("idUnidadeFederativa"));
                 return obj;
             }
         } catch (Exception ex) {
@@ -151,19 +155,26 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         return null;
     }
 
-    public List<TipoLogradouro> consultarTodos() {
+    public Cidade consultar(int id) {
+        return null;
+    }
+
+    public List<Cidade> consultarTodos() {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            List<TipoLogradouro> lista = new ArrayList<TipoLogradouro>();
-            String sql = "select * from tipoLogradouro";
+
+            String sql = "select * from cidade";
             statement = conexao.prepareStatement(sql);
             ResultSet resultado = statement.executeQuery();
+
+            List<Cidade> lista = new ArrayList<Cidade>();
             while (resultado.next()) {
-                TipoLogradouro obj = new TipoLogradouro();
-                obj.setIdTipoLogradouro(resultado.getInt("idTipoLogradouro"));
-                obj.setTipo(resultado.getString("tipo"));
+                Cidade obj = new Cidade(new UnidadeFederativa());
+                obj.setIdCidade(resultado.getInt("idCidade"));
+                obj.setNome(resultado.getString("nome"));
+                obj.getUnidadeFederativa().setIdUnidadeFederativa(resultado.getInt("idUnidadeFederativa"));
                 lista.add(obj);
             }
             return lista;
@@ -187,17 +198,4 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         }
         return null;
     }
-
-//    public static void main(String[] args) {
-//        TipoLogradouroDAO bd = new TipoLogradouroDAOImpl();
-//        TipoLogradouro tipoLogradouro = new TipoLogradouro();
-//        tipoLogradouro.setTipo("Avenida");
-//        bd.inserir(tipoLogradouro);
-//        tipoLogradouro = bd.consultar(tipoLogradouro);
-//        //bd.consultar(1);
-//        System.out.println(tipoLogradouro.getTipo());
-//        //bd.excluir();
-//
-//    }
 }
-

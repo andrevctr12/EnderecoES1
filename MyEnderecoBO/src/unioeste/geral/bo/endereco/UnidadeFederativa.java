@@ -12,6 +12,13 @@ public class UnidadeFederativa implements Serializable {
     private String sigla;
     private Pais pais;
 
+    public UnidadeFederativa() {
+    }
+
+    public UnidadeFederativa(Pais pais) {
+        this.pais = pais;
+    }
+
     public int getIdUnidadeFederativa() {
         return idUnidadeFederativa;
     }

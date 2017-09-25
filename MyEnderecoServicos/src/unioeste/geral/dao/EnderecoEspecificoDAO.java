@@ -13,7 +13,8 @@ public interface EnderecoEspecificoDAO {
     public void inserir(EnderecoEspecifico objeto);
     public void atualizar(EnderecoEspecifico objeto);
     public void excluir(int id);
-    public EnderecoEspecifico consultar(EnderecoEspecifico objeto);
+    public List<EnderecoEspecifico> consultarPorNumero(int numero);
+    public List<EnderecoEspecifico> consultarPorIdEndereco(int idEndereco);
     public EnderecoEspecifico consultar(int id);
     public List<EnderecoEspecifico> consultarTodos();
 

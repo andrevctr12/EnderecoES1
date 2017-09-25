@@ -1,8 +1,8 @@
 package unioeste.geral.dao.impl;
 
 import unioeste.apoio.bd.ConectorEndereco;
-import unioeste.geral.bo.endereco.TipoLogradouro;
-import unioeste.geral.dao.TipoLogradouroDAO;
+import unioeste.geral.bo.endereco.Pais;
+import unioeste.geral.dao.PaisDAO;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,22 +15,22 @@ import java.util.List;
  * @author Cristopher Vidal
  * @author Khadije El Zein
  */
-public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
+public class PaisDAOImpl implements PaisDAO {
     private Connection conexao;
     private java.sql.PreparedStatement statement;
 
-    public void inserir(TipoLogradouro objeto) {
+    public void inserir(Pais objeto) {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            String sql = "INSERT tipoLogradouro VALUES(NULL, '"
-                    + objeto.getTipo() + "'" + ")";
+            String sql = "INSERT pais VALUES(NULL, '"
+                    + objeto.getNome() + "'" + ")";
             statement = conexao.prepareStatement(sql);
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
             if (rs.next()) {
-                objeto.setIdTipoLogradouro(rs.getInt(1));
+                objeto.setIdPais(rs.getInt(1));
             }
             else {
                 throw new SQLException("Nenhum ID obtido");
@@ -56,14 +56,14 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         }
     }
 
-    public void atualizar(TipoLogradouro objeto) {
+    public void atualizar(Pais objeto) {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            String sql = "UPDATE tipoLogradouro SET "
-                    +" tipo=" + objeto.getTipo()
-                    +" where idTipoLogradouro=" + objeto.getIdTipoLogradouro();
+            String sql = "UPDATE pais SET "
+                    +" nome=" + objeto.getNome()
+                    +" where idPais=" + objeto.getIdPais();
             statement = conexao.prepareStatement(sql);
             statement.executeUpdate();
         } catch (Exception ex) {
@@ -92,7 +92,7 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            String sql = "DELETE FROM tipoLogradouro WHERE idTipoLogradouro=?";
+            String sql = "DELETE FROM pais WHERE idPais=?";
             statement = conexao.prepareStatement(sql);
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -116,18 +116,18 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         }
     }
 
-    public TipoLogradouro consultar(int id) {
+    public Pais consultar(Pais objeto) {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            String sql = "select * from tipoLogradouro where idTipoLogradouro=" + id;
+            String sql = "select * from pais where nome='" + objeto.getNome() + "'";
             statement = conexao.prepareStatement(sql);
             ResultSet resultado = statement.executeQuery();
             if (resultado.next()) {
-                TipoLogradouro obj = new TipoLogradouro();
-                obj.setIdTipoLogradouro(resultado.getInt("idTipoLogradouro"));
-                obj.setTipo(resultado.getString("tipo"));
+                Pais obj = new Pais();
+                obj.setIdPais(resultado.getInt("idPais"));
+                obj.setNome(resultado.getString("nome"));
                 return obj;
             }
         } catch (Exception ex) {
@@ -151,19 +151,23 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         return null;
     }
 
-    public List<TipoLogradouro> consultarTodos() {
+    public Pais consultar(int id) {
+        return null;
+    }
+
+    public List<Pais> consultarTodos() {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
             conexao = conexaoDB.getConnection();
             conexao.setAutoCommit(false);
-            List<TipoLogradouro> lista = new ArrayList<TipoLogradouro>();
-            String sql = "select * from tipoLogradouro";
+            List<Pais> lista = new ArrayList<Pais>();
+            String sql = "select * from pais";
             statement = conexao.prepareStatement(sql);
             ResultSet resultado = statement.executeQuery();
             while (resultado.next()) {
-                TipoLogradouro obj = new TipoLogradouro();
-                obj.setIdTipoLogradouro(resultado.getInt("idTipoLogradouro"));
-                obj.setTipo(resultado.getString("tipo"));
+                Pais obj = new Pais();
+                obj.setIdPais(resultado.getInt("idPais"));
+                obj.setNome(resultado.getString("nome"));
                 lista.add(obj);
             }
             return lista;
@@ -187,17 +191,4 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         }
         return null;
     }
-
-//    public static void main(String[] args) {
-//        TipoLogradouroDAO bd = new TipoLogradouroDAOImpl();
-//        TipoLogradouro tipoLogradouro = new TipoLogradouro();
-//        tipoLogradouro.setTipo("Avenida");
-//        bd.inserir(tipoLogradouro);
-//        tipoLogradouro = bd.consultar(tipoLogradouro);
-//        //bd.consultar(1);
-//        System.out.println(tipoLogradouro.getTipo());
-//        //bd.excluir();
-//
-//    }
 }
-

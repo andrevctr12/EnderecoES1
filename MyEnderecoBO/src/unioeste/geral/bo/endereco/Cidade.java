@@ -11,6 +11,13 @@ public class Cidade implements Serializable {
     private String nome;
     private UnidadeFederativa unidadeFederativa;
 
+    public Cidade() {
+    }
+
+    public Cidade(UnidadeFederativa unidadeFederativa) {
+        this.unidadeFederativa = unidadeFederativa;
+    }
+
     public int getIdCidade() {
         return idCidade;
     }
