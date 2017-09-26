@@ -1,26 +1,19 @@
 package unioeste.geral.manager;
 
 import unioeste.geral.bo.endereco.*;
-import unioeste.geral.dao.BairroDAO;
-import unioeste.geral.dao.CidadeDAO;
-import unioeste.geral.dao.TipoLogradouroDAO;
 import unioeste.geral.dao.impl.*;
 import unioeste.geral.exception.EnderecoException;
 import unioeste.geral.util.EnderecoValidador;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class UCEnderecoGeralServicos {
 
     public EnderecoEspecifico cadastrarEndereco(EnderecoEspecifico enderecoEspecifico) throws EnderecoException {
-        UCEnderecoInserirServicos inserirServicos = new UCEnderecoInserirServicos(enderecoEspecifico);
+        CadastrarEndereco inserirServicos = new CadastrarEndereco(enderecoEspecifico);
         if(new EnderecoValidador().validarEndereco(enderecoEspecifico)) {
-            //endereco.getLogradouro().setTipoLogradouro(new TipoLogradouroDAOImpl().consultar(endereco.getLogradouro().getTipoLogradouro()));
+            inserirServicos.cadastrarTipoLogradouro();
             inserirServicos.cadastrarLogradouro();
             inserirServicos.cadastrarCidade();
             inserirServicos.cadastrarBairro();
@@ -37,9 +30,9 @@ public class UCEnderecoGeralServicos {
     }
 
     // TODO
-//	public Endereco alterarEndereco(Endereco endereco) {
+//	public endereco alterarEndereco(endereco endereco) {
 //	}
-//	public Endereco obterEnderecoPorSite(String site) {
+//	public endereco obterEnderecoPorSite(String site) {
 //	}
 
 
@@ -69,6 +62,10 @@ public class UCEnderecoGeralServicos {
     public Cidade obterCidade(Cidade cidade) throws EnderecoException { // TODO: não tá sendo usado
 
         throw new EnderecoException("ID da cidade não encontrado");
+    }
+
+    public List<TipoLogradouro> consultarTodosTipoLogradouro() {
+        return new TipoLogradouroDAOImpl().consultarTodos();
     }
 
 }

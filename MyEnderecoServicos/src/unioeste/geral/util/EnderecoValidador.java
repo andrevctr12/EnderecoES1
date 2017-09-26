@@ -9,7 +9,7 @@ public class EnderecoValidador {
     private static final String SENHA_BD   = "";
     private static final String URL_BD     = "jdbc:mysql://localhost/endereco";
 
-    // TODO: função pra que recebe objeto Endereco pra comparar primeiro dígito do CEP com nomeEstado ou siglaEstado
+    // TODO: função pra que recebe objeto endereco pra comparar primeiro dígito do CEP com nomeEstado ou siglaEstado
 
 	private boolean validarCEP(String cep) throws EnderecoException {
         if (cep.length() != 9) {
@@ -175,7 +175,7 @@ public class EnderecoValidador {
 //        Logradouro logradouro = new Logradouro("nomelogradouro", tipoLogradouro);
 //        new LogradouroControle().salvarLogradouro(logradouro);
 //
-//        Endereco endereco = new Endereco("98484-111", logradouro, bairro, cidade);
+//        endereco endereco = new endereco("98484-111", logradouro, bairro, cidade);
 //
 //        try {
 //            boolean a = new EnderecoValidador().validarEstadoCEP(endereco);

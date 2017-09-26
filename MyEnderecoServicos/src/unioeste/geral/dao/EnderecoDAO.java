@@ -15,6 +15,7 @@ public interface EnderecoDAO {
     public void excluir(int id);
     public List<Endereco> consultar(String CEP);
     public Endereco consultar(int id);
+    public Endereco consultar(Endereco endereco);
     public List<Endereco> consultarTodos();
 
 

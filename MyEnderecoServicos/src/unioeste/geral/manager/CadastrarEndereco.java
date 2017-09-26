@@ -9,11 +9,22 @@ import unioeste.geral.dao.impl.*;
  * @author Cristopher Vidal
  * @author Khadije El Zein
  */
-public class UCEnderecoInserirServicos {
+public class CadastrarEndereco {
     private EnderecoEspecifico enderecoEspecifico;
 
-    public UCEnderecoInserirServicos(EnderecoEspecifico enderecoEspecifico) {
+    public CadastrarEndereco(EnderecoEspecifico enderecoEspecifico) {
         this.enderecoEspecifico = enderecoEspecifico;
+    }
+
+    public  void cadastrarTipoLogradouro() {
+        TipoLogradouro tipoLogradouro = enderecoEspecifico.getEndereco().getLogradouro().getTipoLogradouro();
+        TipoLogradouro tipoLogradouroDB = new TipoLogradouroDAOImpl().consultar(tipoLogradouro);
+        if (tipoLogradouro != null) {
+            tipoLogradouro.setIdTipoLogradouro(tipoLogradouroDB.getIdTipoLogradouro());
+        }
+        else {
+            new TipoLogradouroDAOImpl().inserir(tipoLogradouro);
+        }
     }
 
     public void cadastrarLogradouro() {

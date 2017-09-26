@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/MyEnderecoBO/MyEnderecoBO.iml" filepath="$PROJECT_DIR$/MyEnderecoBO/MyEnderecoBO.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyEnderecoServicos/MyEnderecoServicos.iml" filepath="$PROJECT_DIR$/MyEnderecoServicos/MyEnderecoServicos.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyInfraAPI/MyInfraAPI.iml" filepath="$PROJECT_DIR$/MyInfraAPI/MyInfraAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyInterface/MyInterface.iml" filepath="$PROJECT_DIR$/MyInterface/MyInterface.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyWeb/MyWeb.iml" filepath="$PROJECT_DIR$/MyWeb/MyWeb.iml" />
     </modules>
   </component>

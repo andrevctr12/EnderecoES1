@@ -170,6 +170,47 @@ public class EnderecoDAOImpl implements EnderecoDAO {
         return null;
     }
 
+    public Endereco consultar(Endereco endereco) {
+        try {
+            ConectorEndereco conexaoDB = new ConectorEndereco();
+            conexao = conexaoDB.getConnection();
+            conexao.setAutoCommit(false);
+            String sql = "select * from endereco where idBairro='" + endereco.getBairro().getIdBairro() + "'"
+                    + "and idCidade='" + endereco.getCidade().getIdCidade() + "' and idLogradouro='" + endereco.getLogradouro().getIdLogradouro() + "'";
+            statement = conexao.prepareStatement(sql);
+            ResultSet resultado = statement.executeQuery();
+
+            while (resultado.next()) {
+                Endereco obj = new Endereco(new Cidade(), new Bairro(), new Logradouro());
+                obj.setIdEndereco(resultado.getInt("idEndereco"));
+                obj.setCEP(resultado.getString("CEP"));
+                obj.getCidade().setIdCidade(resultado.getInt("idCidade"));
+                obj.getBairro().setIdBairro(resultado.getInt("idBairro"));
+                obj.getLogradouro().setIdLogradouro(resultado.getInt("idLogradouro"));
+                return obj;
+            }
+        } catch (Exception ex) {
+        try {
+            conexao.rollback();
+        } catch (Exception e) {
+            System.out.println("Erro de conexão");
+        }
+        System.out.println("Erro de consulta");
+    } finally {
+        try {
+            if (conexao != null) {
+                conexao.setAutoCommit(true);
+                statement.close();
+                conexao.close();
+            }
+        } catch (Exception ex) {
+            System.out.println("Erro de consistencia");
+        }
+    }
+        return null;
+
+    }
+
     public List<Endereco> consultarTodos() {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();

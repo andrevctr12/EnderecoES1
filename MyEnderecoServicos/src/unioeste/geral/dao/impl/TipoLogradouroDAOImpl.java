@@ -151,6 +151,41 @@ public class TipoLogradouroDAOImpl implements TipoLogradouroDAO {
         return null;
     }
 
+    public TipoLogradouro consultar(TipoLogradouro objeto) {
+        try {
+            ConectorEndereco conexaoDB = new ConectorEndereco();
+            conexao = conexaoDB.getConnection();
+            conexao.setAutoCommit(false);
+            String sql = "select * from tipoLogradouro where tipo=" + objeto.getTipo();
+            statement = conexao.prepareStatement(sql);
+            ResultSet resultado = statement.executeQuery();
+            if (resultado.next()) {
+                TipoLogradouro obj = new TipoLogradouro();
+                obj.setIdTipoLogradouro(resultado.getInt("idTipoLogradouro"));
+                obj.setTipo(resultado.getString("tipo"));
+                return obj;
+            }
+        } catch (Exception ex) {
+            try {
+                conexao.rollback();
+            } catch (Exception e) {
+                System.out.println("Erro de conexão");
+            }
+            System.out.println("Erro de consulta");
+        } finally {
+            try {
+                if (conexao != null) {
+                    conexao.setAutoCommit(true);
+                    statement.close();
+                    conexao.close();
+                }
+            } catch (Exception ex) {
+                System.out.println("Erro de consistencia");
+            }
+        }
+        return null;
+    }
+
     public List<TipoLogradouro> consultarTodos() {
         try {
             ConectorEndereco conexaoDB = new ConectorEndereco();
